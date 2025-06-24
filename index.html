@@ -1,118 +1,33 @@
 <!DOCTYPE html>
 <html lang="en">
-<style>
-    body {
-        font-family: Arial, sans-serif;
-        background-color: #f4f4f4;
-        text-align: center;
-        margin: 0;
-        padding: 0;
-    }
-
-    .header {
-        position: relative;
-        text-align: center;
-        color: rgb(255, 255, 255);
-    }
-
-    .header img {
-        width: 100%;
-        height: auto;
-    }
-
-    .header .text-container {
-        position: absolute;
-        top: 55%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        text-align: center;
-    }
-
-    .header h1 {
-        font-size: 4vw;
-        font-weight: bold;
-        margin: 0;
-        color: rgb(212, 0, 0);
-        white-space: nowrap;
-    }
-
-    .header h2 {
-        font-size: 3vw;
-        font-weight: bold;
-        margin: 0;
-        color: rgb(214, 211, 0);
-    }
-
-    .gallery {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        margin-top: 20px;
-    }
-
-    .gallery img {
-        max-width: 80%;
-        margin-bottom: 10px;
-        border: 2px solid #ddd;
-        border-radius: 5px;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    }
-
-    @media (max-width: 1024px) {
-        .header h1 {
-            font-size: 6vw;
-        }
-
-        .header h2 {
-            font-size: 5vw;
-        }
-    }
-
-    @media (max-width: 768px) {
-        .header h1 {
-            font-size: 7vw;
-        }
-
-        .header h2 {
-            font-size: 6vw;
-        }
-    }
-
-    @media (max-width: 480px) {
-        .header h1 {
-            font-size: 8vw;
-        }
-
-        .header h2 {
-            font-size: 7vw;
-        }
-    }
-</style>
-
 <head>
     <meta charset="UTF-8">
+    <title>Food Menu</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Al-Halaka Fish Restaurant Menu</title>
+
     <link rel="stylesheet" href="styles.css">
 </head>
-
 <body>
-    
-    <div class="gallery">
-        <div class="gallery">
-            <img src="static/images/image1.jpg" alt="Image 1">
-            <img src="static/images/image2.jpg" alt="Image 2">
-            <img src="static/images/image3.jpg" alt="Image 3">
-            <img src="static/images/image4.jpg" alt="Image 4">
-            <img src="static/images/image5.jpg" alt="Image 5">
-            <img src="static/images/image6.jpg" alt="Image 6">
-            <img src="static/images/image7.jpg" alt="Image 7">
-            <img src="static/images/image8.jpg" alt="Image 8">
-            <img src="static/images/image9.jpg" alt="Image 9">
-            <img src="static/images/image10.jpg" alt="Image 10">
-            <img src="static/images/image11.jpg" alt="Image 11">
-            <img src="static/images/image12.jpg" alt="Image 12">
-        </div>
-</body>
+    <header >
+        <video autoplay loop muted src="static/images/image0.mp4"></video>
+    </header>
+    <div>
+        <a download href="menu.pdf"> Dounload</a>
+        <h3>MENU</h3>
+    </div>
 
+    <section>
+        <img class="img1" src="static/images/image1.jpg" alt="image1">
+        <img src="static/images/image2.jpg" alt="image2">
+        <img src="static/images/image3.jpg" alt="image3">
+        <img src="static/images/image4.jpg" alt="image4">
+        <img src="static/images/image5.jpg" alt="image5">
+        <img src="static/images/image6.jpg" alt="image6">
+        <img src="static/images/image7.jpg" alt="image7">
+        <img src="static/images/image8.jpg" alt="image8">
+        <img src="static/images/image9.jpg" alt="image9">
+        <img src="static/images/image10.jpg" alt="image10">
+    </section>
+    
+</body>
 </html>
