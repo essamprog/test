@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة بيانات تحليل الأبحاث</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: #111827; /* Dark gray-blue */
+            color: #e5e7eb; /* Light gray */
+        }
+        .chart-container {
+            position: relative;
+            height: 350px;
+            width: 100%;
+        }
+        .card {
+            background-color: #1f2937; /* Lighter gray-blue */
+            border: 1px solid #374151;
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2), 0 4px 6px -2px rgba(0, 0, 0, 0.1);
+        }
+        .audience-btn {
+            transition: all 0.2s ease;
+        }
+        .audience-btn.active {
+            background-color: #3b82f6; /* Blue */
+            color: white;
+            font-weight: 700;
+        }
+        .audience-btn:not(.active) {
+            background-color: #374151;
+            color: #d1d5db;
+        }
+        .blinking-cursor {
+            animation: blink 1s step-end infinite;
+        }
+        @keyframes blink {
+            from, to { border-color: transparent }
+            50% { border-color: #3b82f6; }
+        }
+    </style>
+</head>
+<body class="p-4 md:p-8">
+
+    <div class="max-w-7xl mx-auto">
+        <!-- Header: Title and Audience Selector -->
+        <header class="mb-8 text-center">
+            <h1 class="text-4xl font-bold mb-4 text-white">لوحة بيانات تحليل الأبحاث العلمية</h1>
+            <p class="text-lg text-gray-400 mb-6">واجهة تفاعلية لتحليل 24 بحثًا علميًا متخصصًا</p>
+            <div class="flex justify-center items-center gap-3 bg-gray-800 p-2 rounded-xl max-w-sm mx-auto">
+                <button id="investor-btn" class="audience-btn w-full py-2 px-4 rounded-lg active" data-audience="investor">مستثمر</button>
+                <button id="scientist-btn" class="audience-btn w-full py-2 px-4 rounded-lg" data-audience="scientist">عالم</button>
+                <button id="engineer-btn" class="audience-btn w-full py-2 px-4 rounded-lg" data-audience="engineer">مهندس مهمات</button>
+                <a href="page.html">الصفحة بتاعتك</a>
+            </div>
+        </header>
+
+        <!-- Scrolling Proposals -->
+        <div class="card mb-8">
+            <h2 class="text-xl font-semibold mb-3 text-white">مقترحات الأبحاث</h2>
+            <div id="proposals-ticker" class="text-gray-300 text-lg h-8 flex items-center">
+                <p id="proposal-text" class="whitespace-nowrap"></p>
+                <span class="blinking-cursor border-r-2 ml-1 h-6"></span>
+            </div>
+        </div>
+
+        <!-- Main Dashboard Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Left Column: Charts -->
+            <div class="lg:col-span-1 flex flex-col gap-8">
+                <!-- Classification Chart -->
+                <div class="card flex-1">
+                    <h2 class="text-xl font-semibold mb-4 text-white">تصنيف الأبحاث</h2>
+                    <div class="chart-container">
+                        <canvas id="classificationChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Experiment Type Chart -->
+                <div class="card flex-1">
+                    <h2 class="text-xl font-semibold mb-2 text-white">نوع التجارب عبر الزمن</h2>
+                     <div class="flex justify-center gap-2 mb-4">
+                        <button class="exp-filter-btn bg-blue-600 text-white py-1 px-3 rounded-full text-sm" data-type="All">الكل</button>
+                        <button class="exp-filter-btn bg-gray-600 text-white py-1 px-3 rounded-full text-sm" data-type="Human">إنسان</button>
+                        <button class="exp-filter-btn bg-gray-600 text-white py-1 px-3 rounded-full text-sm" data-type="Animal">حيوان</button>
+                        <button class="exp-filter-btn bg-gray-600 text-white py-1 px-3 rounded-full text-sm" data-type="Health">صحة</button>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="experimentTypeChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column: Data Sections -->
+            <div class="lg:col-span-2 flex flex-col gap-8">
+                <div id="welcome-message" class="card text-center h-full flex flex-col justify-center items-center">
+                    <h3 class="text-2xl font-bold text-white">مرحباً بك!</h3>
+                    <p class="text-gray-400 mt-2">الرجاء اختيار تصنيف من الرسم البياني الدائري لبدء استكشاف البيانات.</p>
+                </div>
+                
+                <div id="data-sections" class="hidden">
+                     <!-- Investment Opportunities (Investor Only) -->
+                    <div id="opportunities-section" class="card hidden">
+                        <h2 class="text-xl font-semibold mb-4 text-white">الفرص الاستثمارية</h2>
+                        <div id="opportunities-content" class="flex flex-wrap gap-4">
+                            <!-- Opportunities will be loaded here -->
+                        </div>
+                    </div>
+
+                    <!-- Data Grid -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div class="card" id="results-card">
+                            <h3 class="text-lg font-semibold mb-3 text-blue-400">النتائج (Results)</h3>
+                            <ul id="results-list" class="list-disc pr-5 space-y-2 text-gray-300"></ul>
+                        </div>
+                        <div class="card" id="gaps-card">
+                            <h3 class="text-lg font-semibold mb-3 text-yellow-400">الثغرات (Gaps)</h3>
+                            <ul id="gaps-list" class="list-disc pr-5 space-y-2 text-gray-300"></ul>
+                        </div>
+                        <div class="card" id="consensus-card">
+                            <h3 class="text-lg font-semibold mb-3 text-green-400">نقاط الإجماع (Consensus)</h3>
+                            <ul id="consensus-list" class="list-disc pr-5 space-y-2 text-gray-300"></ul>
+                        </div>
+                        <div class="card" id="disagreement-card">
+                            <h3 class="text-lg font-semibold mb-3 text-red-400">نقاط الاختلاف (Disagreement)</h3>
+                            <ul id="disagreement-list" class="list-disc pr-5 space-y-2 text-gray-300"></ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+
+    // --- START: MOCK DATA (جاهز للربط مع ملفات JSON) ---
+    // في المستقبل، يمكنك حذف هذا الجزء واستخدام fetch() لجلب البيانات من ملفاتك
+    const papersData = Array.from({ length: 24 }, (_, i) => {
+        const classifications = ['بيولوجيا الفضاء', 'علوم المواد', 'فيزياء فلكية', 'أنظمة الدفع'];
+        const types = ['Human', 'Animal', 'Health', 'Cells'];
+        const classification = classifications[i % classifications.length];
+        const type = types[i % types.length];
+        const year = 2018 + (i % 7);
+        return {
+            id: i + 1,
+            title: `بحث رقم ${i + 1} في ${classification}`,
+            classification: classification,
+            experimentType: type,
+            year: year,
+            results: `تم اكتشاف نتيجة مهمة في البحث ${i + 1} تتعلق بـ ${type}.`,
+            gaps: `هناك فجوة في فهم التأثير طويل المدى للبحث ${i + 1}.`,
+            consensus: `يتفق البحث ${i + 1} مع الأبحاث السابقة حول نقطة معينة.`,
+            disagreement: `يختلف البحث ${i + 1} في منهجية التحليل مع بحث آخر.`,
+            proposal: `مقترح لتوسيع البحث ${i + 1} ليشمل دراسات على ${types[(i+1) % types.length]}.`,
+            investment: {
+                opportunity: `تطوير تقنية جديدة بناءً على البحث ${i + 1}`,
+                percentage: 10 + (i * 2)
+            }
+        };
+    });
+    // --- END: MOCK DATA ---
+
+    let classificationChart, experimentTypeChart;
+    let currentAudience = 'investor';
+    let currentClassification = null;
+
+    const welcomeMessage = document.getElementById('welcome-message');
+    const dataSections = document.getElementById('data-sections');
+    const opportunitiesSection = document.getElementById('opportunities-section');
+
+    function initializeDashboard() {
+        renderClassificationChart();
+        renderExperimentTypeChart();
+        setupEventListeners();
+        startProposalTicker();
+        updateAudienceView();
+    }
+
+    function getClassificationData() {
+        const counts = papersData.reduce((acc, paper) => {
+            acc[paper.classification] = (acc[paper.classification] || 0) + 1;
+            return acc;
+        }, {});
+        return {
+            labels: Object.keys(counts),
+            data: Object.values(counts)
+        };
+    }
+
+    function renderClassificationChart() {
+        const ctx = document.getElementById('classificationChart').getContext('2d');
+        const { labels, data } = getClassificationData();
+        
+        if(classificationChart) classificationChart.destroy();
+
+        classificationChart = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'عدد الأبحاث',
+                    data: data,
+                    backgroundColor: ['#3b82f6', '#10b981', '#f97316', '#8b5cf6'],
+                    borderColor: '#1f2937',
+                    borderWidth: 3
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                        labels: {
+                            color: '#e5e7eb',
+                            font: { size: 14, family: 'Cairo' }
+                        }
+                    }
+                },
+                onClick: (event, elements) => {
+                    if (elements.length > 0) {
+                        const chartElement = elements[0];
+                        const label = classificationChart.data.labels[chartElement.index];
+                        handleClassificationSelect(label);
+                    }
+                }
+            }
+        });
+    }
+
+    function renderExperimentTypeChart(filterType = 'All', classification = null) {
+        const ctx = document.getElementById('experimentTypeChart').getContext('2d');
+        let filteredPapers = papersData;
+
+        if (classification) {
+             filteredPapers = filteredPapers.filter(p => p.classification === classification);
+        }
+
+        if (filterType !== 'All') {
+            filteredPapers = filteredPapers.filter(p => p.experimentType === filterType);
+        }
+
+        const dataByYear = filteredPapers.reduce((acc, paper) => {
+            acc[paper.year] = (acc[paper.year] || 0) + 1;
+            return acc;
+        }, {});
+
+        const years = [...new Set(papersData.map(p => p.year))].sort();
+        const counts = years.map(year => dataByYear[year] || 0);
+
+        if (experimentTypeChart) experimentTypeChart.destroy();
+
+        experimentTypeChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: years,
+                datasets: [{
+                    label: 'عدد الأبحاث',
+                    data: counts,
+                    fill: true,
+                    backgroundColor: 'rgba(59, 130, 246, 0.2)',
+                    borderColor: '#3b82f6',
+                    tension: 0.3
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: { color: '#9ca3af', font: { family: 'Cairo' } },
+                        grid: { color: '#374151' }
+                    },
+                    x: {
+                        ticks: { color: '#9ca3af', font: { family: 'Cairo' } },
+                        grid: { color: '#374151' }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                }
+            }
+        });
+    }
+
+    function handleClassificationSelect(classification) {
+        currentClassification = classification;
+        welcomeMessage.classList.add('hidden');
+        dataSections.classList.remove('hidden');
+
+        const filteredPapers = papersData.filter(p => p.classification === classification);
+
+        updateList('results-list', filteredPapers.map(p => p.results));
+        updateList('gaps-list', filteredPapers.map(p => p.gaps));
+        updateList('consensus-list', filteredPapers.map(p => p.consensus));
+        updateList('disagreement-list', filteredPapers.map(p => p.disagreement));
+
+        updateAudienceView();
+        renderExperimentTypeChart('All', currentClassification);
+        
+        document.querySelectorAll('.exp-filter-btn').forEach(btn => {
+            btn.classList.remove('bg-blue-600');
+            btn.classList.add('bg-gray-600');
+        });
+        document.querySelector('.exp-filter-btn[data-type="All"]').classList.add('bg-blue-600');
+        document.querySelector('.exp-filter-btn[data-type="All"]').classList.remove('bg-gray-600');
+    }
+
+    function updateList(elementId, items) {
+        const list = document.getElementById(elementId);
+        list.innerHTML = '';
+        if (items.length > 0) {
+            items.forEach(item => {
+                const li = document.createElement('li');
+                li.textContent = item;
+                list.appendChild(li);
+            });
+        } else {
+            list.innerHTML = '<li>لا توجد بيانات لعرضها.</li>';
+        }
+    }
+    
+    function updateAudienceView() {
+        if (currentAudience === 'investor' && currentClassification) {
+            opportunitiesSection.classList.remove('hidden');
+            const filteredPapers = papersData.filter(p => p.classification === currentClassification);
+            const opportunitiesContent = document.getElementById('opportunities-content');
+            opportunitiesContent.innerHTML = '';
+            filteredPapers.forEach(p => {
+                const button = document.createElement('button');
+                button.className = "bg-green-600 hover:bg-green-700 text-white text-sm font-semibold py-2 px-4 rounded-lg transition-colors";
+                button.textContent = p.investment.opportunity;
+                button.onclick = () => alert(`نسبة الاستثمار المتوقعة: ${p.investment.percentage}%`);
+                opportunitiesContent.appendChild(button);
+            });
+        } else {
+            opportunitiesSection.classList.add('hidden');
+        }
+    }
+
+    function startProposalTicker() {
+        const proposalText = document.getElementById('proposal-text');
+        const proposals = papersData.map(p => p.proposal);
+        let currentIndex = 0;
+        let charIndex = 0;
+        
+        function typeWriter() {
+            if (charIndex < proposals[currentIndex].length) {
+                proposalText.textContent += proposals[currentIndex].charAt(charIndex);
+                charIndex++;
+                setTimeout(typeWriter, 50);
+            } else {
+                setTimeout(() => {
+                    charIndex = 0;
+                    proposalText.textContent = '';
+                    currentIndex = (currentIndex + 1) % proposals.length;
+                    typeWriter();
+                }, 3000); // Wait 3 seconds before showing next proposal
+            }
+        }
+        typeWriter();
+    }
+
+    function setupEventListeners() {
+        document.querySelectorAll('.audience-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                currentAudience = e.target.dataset.audience;
+                document.querySelectorAll('.audience-btn').forEach(b => b.classList.remove('active'));
+                e.target.classList.add('active');
+                updateAudienceView();
+            });
+        });
+        
+        document.querySelectorAll('.exp-filter-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const filterType = e.target.dataset.type;
+                renderExperimentTypeChart(filterType, currentClassification);
+                document.querySelectorAll('.exp-filter-btn').forEach(b => {
+                    b.classList.remove('bg-blue-600');
+                    b.classList.add('bg-gray-600');
+                });
+                e.target.classList.add('bg-blue-600');
+                e.target.classList.remove('bg-gray-600');
+            });
+        });
+    }
+    initializeDashboard();
+});
+</script>
+
+</body>
+</html>

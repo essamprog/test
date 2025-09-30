@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تكنولوجيا الصحة الفضائية - فرص الاستثمار</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #4CAF50;
+            --light-color: #ecf0f1;
+            --dark-color: #34495e;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: var(--primary-color);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary-color), var(--dark-color));
+            color: white;
+            padding: 30px 0;
+            text-align: center;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .dashboard-intro {
+            background-color: white;
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+            line-height: 1.8;
+        }
+        
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+        
+        .chart-container {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease;
+        }
+        
+        .chart-container:hover {
+            transform: translateY(-5px);
+        }
+        
+        .chart-title {
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            color: var(--dark-color);
+            text-align: center;
+            font-weight: 600;
+        }
+        
+        .chart-wrapper {
+            position: relative;
+            height: 300px;
+        }
+        
+        .key-insights {
+            background-color: white;
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+        }
+        
+        .insights-title {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: var(--dark-color);
+            text-align: center;
+        }
+        
+        .insights-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        
+        .insight-card {
+            background-color: var(--light-color);
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid var(--secondary-color);
+        }
+        
+        .insight-card.highlight {
+            border-left-color: var(--accent-color);
+            background-color: #e8f5e9;
+        }
+        
+        .insight-title {
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: var(--primary-color);
+        }
+        
+        footer {
+            text-align: center;
+            padding: 20px;
+            margin-top: 30px;
+            color: var(--dark-color);
+            font-size: 0.9rem;
+        }
+        
+        @media (max-width: 768px) {
+            .charts-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>تكنولوجيا الصحة الفضائية - فرص الاستثمار</h1>
+            <p class="subtitle">لوحة بيانات تفاعلية للمستثمرين تعرض أحجام الأسواق ومعدلات النمو وتوزيع الميزانيات</p>
+        </header>
+        
+        <section class="dashboard-intro">
+            <p>تُظهر هذه اللوحة فرص الاستثمار عالية النمو في مجال تكنولوجيا الصحة الفضائية، مع التركيز على ثلاثة مجالات رئيسية: أدوية العظام، المعدات المخبرية الفضائية، وأجهزة الصحة الذكية. البيانات مبنية على أحدث التقارير لعام 2025 من ناسا وشركات الأبحاث المتخصصة.</p>
+        </section>
+        
+        <div class="charts-grid">
+            <div class="chart-container">
+                <h2 class="chart-title">أسواق تكنولوجيا الصحة الفضائية: الحالي مقابل المتوقع</h2>
+                <div class="chart-wrapper">
+                    <canvas id="marketSizeChart"></canvas>
+                </div>
+            </div>
+            
+            <div class="chart-container">
+                <h2 class="chart-title">معدلات النمو السنوية المتوقعة (2025-2032)</h2>
+                <div class="chart-wrapper">
+                    <canvas id="growthRateChart"></canvas>
+                </div>
+            </div>
+            
+            <div class="chart-container">
+                <h2 class="chart-title">توزيع ميزانية ناسا 2025 (%)</h2>
+                <div class="chart-wrapper">
+                    <canvas id="nasaBudgetChart"></canvas>
+                </div>
+            </div>
+        </div>
+        
+        <section class="key-insights">
+            <h2 class="insights-title">رؤى استثمارية رئيسية</h2>
+            <div class="insights-grid">
+                <div class="insight-card">
+                    <div class="insight-title">فرصة الاستخدام المزدوج</div>
+                    <p>تكنولوجيا الصحة الفضائية لها تطبيقات أرضية قوية، مما يخلق فرص استثمارية بمخاطر منخفضة وعوائد مرتفعة.</p>
+                </div>
+                
+                <div class="insight-card highlight">
+                    <div class="insight-title">أجهزة الصحة الذكية</div>
+                    <p>أعلى معدل نمو متوقع (17.8%) مع إسقاطات سوقية تصل إلى 325 مليار دولار بحلول 2032.</p>
+                </div>
+                
+                <div class="insight-card">
+                    <div class="insight-title">منح SBIR/STTR</div>
+                    <p>فرصة تمويلية للمستثمرين الصغار تصل إلى 850,000 دولار في المرحلة الثانية مع دعم مباشر من ناسا.</p>
+                </div>
+                
+                <div class="insight-card">
+                    <div class="insight-title">الاستثمار في التكنولوجيا الحيوية الفضائية</div>
+                    <p>شهدت نمواً بنسبة 17% في 2024 مع توقعات باستمرار النمو في 2025.</p>
+                </div>
+            </div>
+        </section>
+        
+        <footer>
+            <p>البيانات مبنية على تقارير ناسا 2025، روك هيلث، وجراند فيو ريسيرش</p>
+        </footer>
+    </div>
+
+    <script>
+        // مخطط أحجام الأسواق
+        const marketSizeCtx = document.getElementById('marketSizeChart').getContext('2d');
+        const marketSizeChart = new Chart(marketSizeCtx, {
+            type: 'bar',
+            data: {
+                labels: ["أدوية هشاشة العظام", "الأجهزة الذكية القابلة للارتداء", "التكنولوجيا الحيوية الفضائية (الإجمالي)"],
+                datasets: [
+                    {
+                        label: 'حجم 2025 (مليار دولار)',
+                        data: [15.6, 54, 10],
+                        backgroundColor: '#4CAF50'
+                    },
+                    {
+                        label: 'إسقاط 2032 (مليار دولار)',
+                        data: [21, 325, 25],
+                        backgroundColor: '#2196F3'
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'حجم السوق (مليار دولار)'
+                        }
+                    }
+                },
+                plugins: {
+                    title: {
+                        display: false
+                    },
+                    legend: {
+                        position: 'top',
+                        rtl: true
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return `${context.dataset.label}: ${context.raw} مليار دولار`;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // مخطط معدلات النمو
+        const growthRateCtx = document.getElementById('growthRateChart').getContext('2d');
+        const growthRateChart = new Chart(growthRateCtx, {
+            type: 'pie',
+            data: {
+                labels: ["أدوية العظام (هشاشة العظام)", "أجهزة الصحة الذكية (القابلة للارتداء)", "معدات المختبرات الفضائية (أدوات التكنولوجيا الحيوية)"],
+                datasets: [
+                    {
+                        data: [4.4, 17.8, 30],
+                        backgroundColor: ["#FF6384", "#36A2EB", "#FFCE56"],
+                        borderWidth: 1
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    title: {
+                        display: false
+                    },
+                    legend: {
+                        position: 'right',
+                        rtl: true
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return `${context.label}: ${context.raw}%`;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // مخطط ميزانية ناسا
+        const nasaBudgetCtx = document.getElementById('nasaBudgetChart').getContext('2d');
+        const nasaBudgetChart = new Chart(nasaBudgetCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ["تكنولوجيا الفضاء (بما في ذلك الصحة)", "برنامج أرتميس (صحة الإنسان)", "ميزانية ناسا الأخرى"],
+                datasets: [
+                    {
+                        data: [4.7, 7.6, 87.7],
+                        backgroundColor: ["#FF9F40", "#FF6384", "#C9CBCF"],
+                        borderWidth: 1
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    title: {
+                        display: false
+                    },
+                    legend: {
+                        position: 'bottom',
+                        rtl: true
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return `${context.label}: ${context.raw}%`;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
